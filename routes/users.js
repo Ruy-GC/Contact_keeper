@@ -1,9 +1,10 @@
 //create express server
+const bcrypt = require('bcryptjs/dist/bcrypt');
 const express = require('express');
 const router = express.Router();
 const {validationResult, check } = require('express-validator');
 
-//user schema
+//user model from schema
 const User = require('../models/User');
 
 // @route   POST api/users
@@ -20,7 +21,7 @@ router.post('/',[
         'Please enter a password with 6 or more characters'
     ).isLength({min:6})
 
-],(req,res) => {
+], async (req,res) => {
     const errors = validationResult(req);
 
     //if there is an error
@@ -28,7 +29,41 @@ router.post('/',[
         //400 bad request and array of errors
         return res.status(400).json({errors: errors.array()});
     }
-    res.send(req.body);
+    
+    const {name, email,password} = req.body;
+
+    try {
+        //only can use await with async functions}
+
+        //searches if the user is already registered
+        let user = await User.findOne({email});
+
+        if(user){
+            return res.status(400).json({msg: "User already exists"});
+        }
+
+        //creates new user instance to hash the password
+        user = new User({
+            name,
+            email,
+            password
+        });
+
+        //we use await becausde genSalt and hash functions return a promise
+        //10 is the rounds for the salt
+        const salt = await bcrypt.genSalt(10); 
+         //returns hashed version of the password
+        user.password = await bcrypt.hash(password,salt);
+
+        //saves user in mogoDB
+        await user.save();
+
+        res.send('User saved');
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server error');
+    }
 });
 
 module.exports = router;
