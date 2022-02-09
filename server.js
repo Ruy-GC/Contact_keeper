@@ -8,6 +8,10 @@ const app = express();
 //connect database
 connectDB();
 
+//Init middleware
+app.use(express.json({extended:false})); //allows to accept request body data 
+
+//main route
 app.get('/',(req,res) => res.json({msg: 'Welcome to the Contactkeeper API...'}));
 
 //Define routes
