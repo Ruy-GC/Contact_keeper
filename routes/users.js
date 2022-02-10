@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs/dist/bcrypt');
 const express = require('express');
 const router = express.Router();
 const {validationResult, check } = require('express-validator');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 //user model from schema
 const User = require('../models/User');
@@ -58,7 +60,21 @@ router.post('/',[
         //saves user in mogoDB
         await user.save();
 
-        res.send('User saved');
+        //payload to send in jwt
+        const payload = {
+            user: {
+                id:user.id
+            }
+        }
+
+        //sign the jwt to ensure it hasn't been altered, sign uses payload and secret
+        jwt.sign(payload,config.get('jwtSecret'),{
+            expiresIn: 3600
+        },(err,token) => {
+            //return generated jwt
+            if(err) throw err;
+            res.json({token});
+        });
 
     } catch (error) {
         console.error(error.message);

@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://Ruy-GC:Pipo7274@contactkeeper.lwydy.mongodb.net/Contact_keeper?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://Ruy-GC:Pipo7274@contactkeeper.lwydy.mongodb.net/Contact_keeper?retryWrites=true&w=majority",
+    "jwtSecret": "secret"
 }
