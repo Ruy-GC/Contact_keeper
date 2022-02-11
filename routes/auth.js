@@ -22,7 +22,7 @@ router.get('/', auth, async (req,res) => {
         const user = await User.findById(req.user.id).select('-password');
         //user information
         res.json(user);
-    } catch (error) {
+    } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
@@ -77,7 +77,7 @@ router.post('/',[
             res.json({token});
         });
 
-    } catch (error) {
+    } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
