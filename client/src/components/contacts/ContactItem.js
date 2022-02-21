@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const ContactItem = ({contact}) => {
     const {id,name,email,phone,type} = contact;
