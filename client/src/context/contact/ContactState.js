@@ -51,7 +51,12 @@ const ContactState = props => {
         });
     }
     //delete contact
-
+    const deleteContact = id => {
+        dispatch({
+            type: DELETE_CONTACT,
+            payload: id
+        });
+    }
     //set current contact
 
     //clear current contact
@@ -64,9 +69,11 @@ const ContactState = props => {
 
     return (
         <ContactContext.Provider
+            //add methods to be accessed by context
             value = {{
                 contacts: state.contacts,
-                addContact
+                addContact,
+                deleteContact
             }}
         >
             {props.children}

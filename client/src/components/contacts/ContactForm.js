@@ -5,6 +5,7 @@ const ContactForm = () => {
     //add context to access methods 
     const contactContext = useContext(ContactContext);
 
+    //useState hook
     const[contact,setContact] = useState({
         name: '',
         email: '',
