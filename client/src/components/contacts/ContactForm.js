@@ -1,9 +1,26 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import ContactContext from '../../context/contact/contactContext';
 
 const ContactForm = () => {
     //add context to access methods 
     const contactContext = useContext(ContactContext);
+
+    const {addContact, current, clearCurrent,updateContact} = contactContext;
+
+    //mimics component did mount, if current has value changes form to current data
+    useEffect(()=> {
+        if(current !== null){
+            setContact(current);
+        }else{
+            setContact({
+                name: '',
+                email: '',
+                phone: '',
+                type: 'personal'
+            })
+        }
+    //add dependencias, this makes that the hook is only used when context is needed
+    },[contactContext]);
 
     //useState hook
     const[contact,setContact] = useState({
@@ -25,22 +42,29 @@ const ContactForm = () => {
 
     const onSubmit = e => {
         e.preventDefault();
+
+        //if there is no current contact create a new one, 
+        if(current === null){
+            //send contact to context for upload
+            addContact(contact);
         
-        //send contact to context for upload
-        contactContext.addContact(contact);
+        //else update current contact
+        }else{
+            updateContact(contact);
+        }
 
         //set contact state to default to reset the form
-        setContact({
-            name: '',
-            email: '',
-            phone: '',
-            type: 'professional'
-        });
+        clearAll();
+    }
+
+    //clear form
+    const clearAll = () =>{
+        clearCurrent();
     }
 
     return (
         <form onSubmit={onSubmit}>
-            <h2 className='text-primary'>Add Contact</h2>
+            <h2 className='text-primary'>{current ? 'Edit Contact' : 'Add Contact'}</h2>
             <input
                 type= 'text'
                 placeholder='name'
@@ -80,8 +104,11 @@ const ContactForm = () => {
                 onChange = {onChange}
             />{' '}Professional{' '}
             <div>
-                <input type = "submit" value = "Add Contact" className = "btn btn-primary"/>
+                <input type = "submit" value = {current ? 'Update Contact' : 'Add Contact'} className = "btn btn-primary btn-block"/>
             </div>
+            {current && <div>
+                <button className = "btn btn-light btn-block" onClick={clearAll}>Clear</button>    
+            </div>}
         </form>
     )
 }

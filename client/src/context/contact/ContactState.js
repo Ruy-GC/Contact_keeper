@@ -36,7 +36,8 @@ const ContactState = props => {
                 phone: '333-333-333',
                 type: 'professional'
             },
-        ]
+        ],
+        current: null
     };
 
     const [state,dispatch] = useReducer(contactReducer, initialState);
@@ -58,11 +59,26 @@ const ContactState = props => {
         });
     }
     //set current contact
-
+    const setCurrent = contact => {
+        dispatch({
+            type: SET_CURRENT,
+            payload: contact
+        });
+    }
     //clear current contact
-
+    const clearCurrent = () => {
+        dispatch({
+            type: SET_CURRENT,
+            payload: null
+        });
+    }
     //update contact
-
+    const updateContact = contact => {
+        dispatch({
+            type: UPDATE_CONTACT,
+            payload: contact
+        });
+    }
     //filter contacts
 
     //clear filter
@@ -72,8 +88,12 @@ const ContactState = props => {
             //add methods to be accessed by context
             value = {{
                 contacts: state.contacts,
+                current:state.current,
                 addContact,
-                deleteContact
+                deleteContact,
+                setCurrent,
+                clearCurrent,
+                updateContact
             }}
         >
             {props.children}
