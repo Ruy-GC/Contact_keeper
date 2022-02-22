@@ -39,7 +39,24 @@ export default (state,action) => {
                     contact => contact.id === action.payload.id 
                     ? action.payload //updates contact
                     : contact// keeps same contact
-                )}
+                )};
+        case FILTER_CONTACTS:
+            return {
+                ...state,
+                // filter for every contact in state
+                filtered: state.contacts.filter(contact => {
+                    //gets text from payload and turns it into a regular expression
+                    //this helps validate the string by checking if the pattern of characters 
+                    //in the regular expression is in other strings
+                    const regex = new RegExp(`${action.payload}`, 'gi');
+                    return contact.name.match(regex) || contact.email.match(regex);
+                })
+            };
+        case CLEAR_FILTER:
+            return {
+                ...state,
+                filtered: null
+            };
         default:
             return state;
     }
