@@ -12,7 +12,14 @@ import ContactState from './context/contact/ContactState';
 import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
 
+//utils
+import setAuthToken from './utils/setAuthToken';
 import './App.css';
+
+//set auth token for all the web app
+if(localStorage.token){
+    setAuthToken(localStorage.token); 
+}
 
 const App = () => {
     return (

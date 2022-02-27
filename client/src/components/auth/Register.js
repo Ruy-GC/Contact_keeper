@@ -1,21 +1,31 @@
 import React, {useState,useContext, useEffect} from 'react'
 import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext';
+import { useNavigate  } from "react-router-dom"
 
-const Register = () => {
+const Register = props => {
     const alertContext = useContext(AlertContext);
     const {setAlert} = alertContext;
 
     const authContext = useContext(AuthContext);
-    const {register,error,clearErrors} = authContext;
+    const {register,error,clearErrors,isAuthenticated} = authContext;
+
+    //allow to naviigate through the routes
+    const navigate = useNavigate ();
 
     useEffect(()=> {
+        if(isAuthenticated){
+            //redirects to the homepage
+            navigate('/');
+        }
+
         if(error === 'User already exists'){
             setAlert(error,'danger');
             clearErrors();
         }
-    // this runs when error changes or is added to state
-    },[error]);
+        
+        // eslint-disable-next-line
+    },[error,isAuthenticated,props.history]);
 
     //user register fields
     const [user,setUser] = useState({
@@ -27,6 +37,7 @@ const Register = () => {
 
     const {name,email,password,password2} = user;
 
+    //copies user data and changes the target of the onchange
     const onChange = e => setUser({...user, [e.target.name]:e.target.value});
 
     const onSubmit = e => {
@@ -74,4 +85,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default Register;
