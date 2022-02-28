@@ -25,7 +25,7 @@ const Register = props => {
         }
         
         // eslint-disable-next-line
-    },[error,isAuthenticated,props.history]);
+    },[error,isAuthenticated]);
 
     //user register fields
     const [user,setUser] = useState({

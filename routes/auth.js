@@ -51,7 +51,7 @@ router.post('/',[
         let user = await User.findOne({email});
         //if uyser does not exist
         if(!user){
-            return res.status(400).json({msg: 'invalid Credentials'});
+            return res.status(400).json({msg: 'Invalid Credentials'});
         }
 
         //checks if passwords match 
@@ -59,7 +59,7 @@ router.post('/',[
 
         //if password does not match
         if(!isMatch){
-            return res.status(400).json({msg: 'invalid Credentials'});
+            return res.status(400).json({msg: 'Invalid Credentials'});
         }
 
         const payload = {
